@@ -3,6 +3,7 @@ import { DashboardLayout } from './components/DashboardLayout';
 import { AuthPage } from './pages/AuthPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { PrivateRoute } from './components/PrivateRoute';
+import { LessonPage } from './pages/LessonPage';
 
 function App() {
   return (
@@ -15,6 +16,16 @@ function App() {
             <PrivateRoute>
               <DashboardLayout>
                 <DashboardPage />
+              </DashboardLayout>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/lesson/:id"
+          element={
+            <PrivateRoute>
+              <DashboardLayout>
+                <LessonPage />
               </DashboardLayout>
             </PrivateRoute>
           }
