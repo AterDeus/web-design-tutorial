@@ -27,12 +27,28 @@ export const Header: FC<HeaderProps> = ({ title = 'Веб-учебник' }) => 
           <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
           <nav className="flex space-x-4 items-center">
             {user ? (
-              <>
-                <span className="text-gray-700 text-sm mr-2">{user.email}</span>
+              <div className="flex items-center space-x-3">
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt="avatar"
+                    className="w-8 h-8 rounded-full object-cover border"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">
+                    {user.displayName?.[0] || user.email?.[0] || '?'}
+                  </div>
+                )}
+                <div className="flex flex-col text-right">
+                  {user.displayName && (
+                    <span className="text-gray-900 text-sm leading-tight font-medium">{user.displayName}</span>
+                  )}
+                  <span className="text-gray-600 text-xs leading-tight">{user.email}</span>
+                </div>
                 <Button variant="outline" size="sm" onClick={handleLogout}>
                   Выйти
                 </Button>
-              </>
+              </div>
             ) : null}
           </nav>
         </div>
