@@ -5,6 +5,7 @@ import { initializeDatabase } from '../scripts/initDb';
 import { LessonForm } from './LessonForm';
 import { useLessons } from '../hooks/useLessons';
 import type { Lesson } from '../services/firestore';
+import { Loader } from './Loader';
 
 export const AdminPanel: FC = () => {
   const [showForm, setShowForm] = useState(false);
@@ -33,6 +34,14 @@ export const AdminPanel: FC = () => {
     setEditingLesson(undefined);
     setShowForm(!showForm);
   };
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <Loader size="large" />
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

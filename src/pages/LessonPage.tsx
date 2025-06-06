@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { useProgressStore } from '../store/useProgressStore';
 import { useLessons } from '../hooks/useLessons';
 import type { Lesson } from '../services/firestore';
+import { Loader } from '../components/Loader';
 
 export const LessonPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,11 @@ export const LessonPage = () => {
   }, [id, getLessonById, markCompleted]);
 
   if (loading) {
-    return <div className="text-center mt-10">Загрузка...</div>;
+    return (
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <Loader size="large" />
+      </div>
+    );
   }
 
   if (!lesson) {
@@ -42,7 +47,7 @@ export const LessonPage = () => {
   const nextLesson = lessonIndex < lessons.length - 1 ? lessons[lessonIndex + 1] : null;
 
   return (
-    <div>
+    <div className="container mx-auto px-4 py-8 max-w-4xl min-h-[60vh]">
       <LessonViewer lesson={lesson} />
       <div className="flex justify-between mt-8">
         <Button

@@ -1,6 +1,7 @@
 import { useProgressStore } from '../store/useProgressStore';
 import { LessonCard } from '../components/LessonCard';
 import { useLessons } from '../hooks/useLessons';
+import { Loader } from '../components/Loader';
 
 export const DashboardPage = () => {
   const completedLessons = useProgressStore(s => s.completedLessons);
@@ -8,10 +9,8 @@ export const DashboardPage = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-gray-500">Загрузка уроков...</div>
-        </div>
+      <div className="fixed inset-0 flex items-center justify-center bg-white">
+        <Loader size="large" />
       </div>
     );
   }
