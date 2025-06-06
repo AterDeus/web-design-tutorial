@@ -1,38 +1,42 @@
-import { lessons } from '../data/lessons';
-import { Link } from 'react-router-dom';
 import { useProgressStore } from '../store/useProgressStore';
+import { LessonCard } from '../components/LessonCard';
+import { useLessons } from '../hooks/useLessons';
 
 export const DashboardPage = () => {
   const completedLessons = useProgressStore(s => s.completedLessons);
-  const progress = Math.round((completedLessons.length / lessons.length) * 100);
+  const { lessons, loading, error } = useLessons();
+
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-gray-500">Загрузка уроков...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-center h-64">
+          <div className="text-red-500">{error}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Ваши уроки</h2>
-      <div className="mb-6">
-        <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-          <div
-            className="h-3 bg-blue-500 transition-all"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="text-sm text-gray-600 mt-1">Прогресс: {completedLessons.length} из {lessons.length} ({progress}%)</div>
-      </div>
-      <ul className="space-y-3">
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Уроки веб-дизайна</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {lessons.map(lesson => (
-          <li key={lesson.id}>
-            <Link
-              to={`/lesson/${lesson.id}`}
-              className={`block px-4 py-3 rounded border bg-white hover:bg-blue-50 transition flex items-center justify-between ${completedLessons.includes(lesson.id) ? 'border-green-400' : ''}`}
-            >
-              <span className="font-semibold">{lesson.title}</span>
-              {completedLessons.includes(lesson.id) && (
-                <span className="ml-2 text-green-600 text-lg">✔</span>
-              )}
-            </Link>
-          </li>
+          <LessonCard 
+            key={lesson.id} 
+            lesson={lesson}
+          />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }; 

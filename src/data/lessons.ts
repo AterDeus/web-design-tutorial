@@ -1,27 +1,41 @@
-import type { Lesson, Quiz } from '../types';
+export interface Lesson {
+  id: string;
+  title: string;
+  content: string;
+  image: string;
+  description: string;
+  duration: number;
+  difficulty: 'Начальный' | 'Средний' | 'Продвинутый';
+}
 
 export const lessons: Lesson[] = [
   {
-    id: 'lesson-1',
-    title: 'Введение в веб-дизайн',
-    content: 'В этом уроке вы узнаете, что такое веб-дизайн и какие бывают сайты.\n\n**Веб-дизайн** — это процесс создания внешнего вида и структуры сайта.',
-    order: 1,
-    type: 'text',
+    id: '1',
+    title: 'Введение в HTML',
+    content: 'HTML - это язык разметки, который используется для создания веб-страниц...',
+    image: '/images/html-intro.jpg',
+    description: 'Изучите основы HTML и создайте свою первую веб-страницу',
+    duration: 30,
+    difficulty: 'Начальный'
   },
   {
-    id: 'lesson-2',
-    title: 'Тест: основы веб-дизайна',
-    content: '',
-    order: 2,
-    type: 'quiz',
+    id: '2',
+    title: 'Основы CSS',
+    content: 'CSS - это язык стилей, который используется для оформления веб-страниц...',
+    image: '/images/css-basics.jpg',
+    description: 'Научитесь стилизовать веб-страницы с помощью CSS',
+    duration: 45,
+    difficulty: 'Начальный'
   },
   {
-    id: 'lesson-3',
-    title: 'Практика: ваша первая страница',
-    content: 'Создайте простую HTML-страницу с заголовком и абзацем.',
-    order: 3,
-    type: 'practice',
-  },
+    id: '3',
+    title: 'Адаптивный дизайн',
+    content: 'Адаптивный дизайн позволяет создавать сайты, которые хорошо выглядят на любых устройствах...',
+    image: '/images/responsive-design.jpg',
+    description: 'Создавайте сайты, которые отлично выглядят на всех устройствах',
+    duration: 60,
+    difficulty: 'Средний'
+  }
 ];
 
 export const quizzes: Quiz[] = [

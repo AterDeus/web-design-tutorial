@@ -1,25 +1,43 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { lessons } from '../data/lessons';
 import { LessonViewer } from '../components/LessonViewer';
 import { Button } from '../components/Button';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useProgressStore } from '../store/useProgressStore';
+import { useLessons } from '../hooks/useLessons';
+import type { Lesson } from '../services/firestore';
 
 export const LessonPage = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const lessonIndex = lessons.findIndex(l => l.id === id);
-  const lesson = lessons[lessonIndex];
+  const { lessons, getLessonById } = useLessons();
+  const [lesson, setLesson] = useState<Lesson | null>(null);
+  const [loading, setLoading] = useState(true);
   const markCompleted = useProgressStore(s => s.markCompleted);
 
   useEffect(() => {
-    if (lesson) markCompleted(lesson.id);
-  }, [lesson, markCompleted]);
+    const fetchLesson = async () => {
+      if (id) {
+        const lessonData = await getLessonById(id);
+        setLesson(lessonData);
+        if (lessonData) {
+          markCompleted(lessonData.id);
+        }
+      }
+      setLoading(false);
+    };
+
+    fetchLesson();
+  }, [id, getLessonById, markCompleted]);
+
+  if (loading) {
+    return <div className="text-center mt-10">Загрузка...</div>;
+  }
 
   if (!lesson) {
     return <div className="text-center mt-10 text-red-500">Урок не найден</div>;
   }
 
+  const lessonIndex = lessons.findIndex(l => l.id === id);
   const prevLesson = lessonIndex > 0 ? lessons[lessonIndex - 1] : null;
   const nextLesson = lessonIndex < lessons.length - 1 ? lessons[lessonIndex + 1] : null;
 

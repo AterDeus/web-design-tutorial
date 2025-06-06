@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'fire
 import { auth } from '../services/firebase';
 import { useAuthStore } from '../store/useAuthStore';
 import { Button } from '../components/Button';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthPage = () => {
   const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -11,6 +12,7 @@ export const AuthPage = () => {
   const [error, setError] = useState<string | null>(null);
   const setUser = useAuthStore((s) => s.setUser);
   const setLoading = useAuthStore((s) => s.setLoading);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +26,7 @@ export const AuthPage = () => {
         const res = await createUserWithEmailAndPassword(auth, email, password);
         setUser(res.user);
       }
+      navigate('/');
     } catch (err: any) {
       setError(err.message || 'Ошибка аутентификации');
     } finally {
