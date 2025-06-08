@@ -46,21 +46,15 @@ export const LessonViewer: FC<LessonViewerProps> = ({ lesson }) => {
         setUserCode(initialCode);
       } finally {
         setIsLoading(false);
+        // Даем время на рендеринг Markdown и Mermaid
+        setTimeout(() => {
+          setIsContentReady(true);
+        }, 100);
       }
     };
 
     loadTasks();
   }, [lesson.id]);
-
-  useEffect(() => {
-    if (!isLoading && contentRef.current) {
-      // Даем время на рендеринг Markdown и Mermaid
-      const timer = setTimeout(() => {
-        setIsContentReady(true);
-      }, 500);
-      return () => clearTimeout(timer);
-    }
-  }, [isLoading]);
 
   const handleCodeChange = (taskId: string, code: string) => {
     setUserCode(prev => ({
@@ -177,7 +171,7 @@ export const LessonViewer: FC<LessonViewerProps> = ({ lesson }) => {
 
   if (showResults) {
     return (
-      <div className="min-h-[60vh] transition-opacity duration-500 ease-in-out">
+      <div className={`min-h-[60vh] transition-opacity duration-500 ease-in-out ${isContentReady ? 'opacity-100' : 'opacity-0'}`}>
         <h1 className="text-3xl font-bold mb-6">{lesson.title}</h1>
         {renderResults()}
       </div>
@@ -186,7 +180,7 @@ export const LessonViewer: FC<LessonViewerProps> = ({ lesson }) => {
 
   if (tasks.length === 0) {
     return (
-      <div className="min-h-[60vh] transition-opacity duration-500 ease-in-out">
+      <div className={`min-h-[60vh] transition-opacity duration-500 ease-in-out ${isContentReady ? 'opacity-100' : 'opacity-0'}`}>
         <h1 className="text-3xl font-bold mb-6">{lesson.title}</h1>
         <div className="text-center text-gray-600">Задания не найдены</div>
       </div>
@@ -196,7 +190,7 @@ export const LessonViewer: FC<LessonViewerProps> = ({ lesson }) => {
   const currentTask = tasks[currentTaskIndex];
 
   return (
-    <div className="min-h-[60vh] transition-opacity duration-500 ease-in-out">
+    <div className={`min-h-[60vh] transition-opacity duration-500 ease-in-out ${isContentReady ? 'opacity-100' : 'opacity-0'}`}>
       <h1 className="text-3xl font-bold mb-6">{lesson.title}</h1>
       
       {lesson.videoUrl && (
