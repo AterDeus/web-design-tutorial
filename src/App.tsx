@@ -1,12 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { DashboardLayout } from './components/DashboardLayout';
 import { AuthPage } from './pages/AuthPage';
 import { DashboardPage } from './pages/DashboardPage';
-import { PrivateRoute } from './components/PrivateRoute';
 import { LessonPage } from './pages/LessonPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { AdminPanel } from './components/AdminPanel';
+import { ProtectedRouteLayout } from './components/ProtectedRouteLayout';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -16,53 +16,44 @@ function App() {
         <Route
           path="/"
           element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <DashboardPage />
-              </DashboardLayout>
-            </PrivateRoute>
+            <ProtectedRouteLayout>
+              <DashboardPage />
+            </ProtectedRouteLayout>
           }
         />
         <Route
           path="/lesson/:id"
           element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <LessonPage />
-              </DashboardLayout>
-            </PrivateRoute>
+            <ProtectedRouteLayout>
+              <LessonPage />
+            </ProtectedRouteLayout>
           }
         />
         <Route
           path="/progress"
           element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <ProgressPage />
-              </DashboardLayout>
-            </PrivateRoute>
+            <ProtectedRouteLayout>
+              <ProgressPage />
+            </ProtectedRouteLayout>
           }
         />
         <Route
           path="/profile"
           element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <ProfilePage />
-              </DashboardLayout>
-            </PrivateRoute>
+            <ProtectedRouteLayout>
+              <ProfilePage />
+            </ProtectedRouteLayout>
           }
         />
         <Route
           path="/admin"
           element={
-            <PrivateRoute>
-              <DashboardLayout>
-                <AdminPanel />
-              </DashboardLayout>
-            </PrivateRoute>
+            <ProtectedRouteLayout>
+              <AdminPanel />
+            </ProtectedRouteLayout>
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );

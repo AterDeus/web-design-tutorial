@@ -27,12 +27,18 @@ export const DashboardPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Уроки веб-дизайна</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Уроки веб-дизайна</h1>
+        <div className="text-gray-600">
+          Завершено: {completedLessons.length} из {lessons.length}
+        </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {lessons.map(lesson => (
           <LessonCard 
             key={lesson.id} 
             lesson={lesson}
+            isCompleted={completedLessons.includes(lesson.id)}
           />
         ))}
       </div>

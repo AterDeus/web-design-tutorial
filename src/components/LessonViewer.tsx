@@ -26,7 +26,6 @@ export const LessonViewer: FC<LessonViewerProps> = ({ lesson }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isContentReady, setIsContentReady] = useState(false);
   const editableRefs = useRef<Record<string, HTMLDivElement | null>>({});
-  const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const loadTasks = async () => {

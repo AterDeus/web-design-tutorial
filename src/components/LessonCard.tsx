@@ -4,12 +4,18 @@ import type { Lesson } from '../data/lessons';
 
 interface LessonCardProps {
   lesson: Lesson;
+  isCompleted?: boolean;
 }
 
-export const LessonCard: FC<LessonCardProps> = ({ lesson }) => {
+export const LessonCard: FC<LessonCardProps> = ({ lesson, isCompleted = false }) => {
   return (
     <Link to={`/lesson/${lesson.id}`} className="block">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow relative">
+        {isCompleted && (
+          <div className="absolute top-2 right-2 bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium z-10">
+            Завершено
+          </div>
+        )}
         <div className="aspect-video relative">
           <img 
             src={lesson.image} 
