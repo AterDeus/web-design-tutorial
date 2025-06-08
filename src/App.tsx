@@ -5,6 +5,7 @@ import { LessonPage } from './pages/LessonPage';
 import { ProgressPage } from './pages/ProgressPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { AdminPanel } from './components/AdminPanel';
+import { EditLessonPage } from './pages/EditLessonPage';
 import { ProtectedRouteLayout } from './components/ProtectedRouteLayout';
 import { NotFoundPage } from './pages/NotFoundPage';
 
@@ -50,6 +51,22 @@ function App() {
           element={
             <ProtectedRouteLayout>
               <AdminPanel />
+            </ProtectedRouteLayout>
+          }
+        />
+        <Route
+          path="/admin/lesson/:id"
+          element={
+            <ProtectedRouteLayout>
+              <EditLessonPage />
+            </ProtectedRouteLayout>
+          }
+        />
+        <Route
+          path="/admin/lesson/new"
+          element={
+            <ProtectedRouteLayout>
+              <EditLessonPage />
             </ProtectedRouteLayout>
           }
         />

@@ -1,15 +1,15 @@
 import type { FC } from 'react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from './Button';
 import { initializeDatabase } from '../scripts/initDb';
-import { LessonForm } from './LessonForm';
 import { useLessons } from '../hooks/useLessons';
 import type { Lesson } from '../services/firestore';
 import { Loader } from './Loader';
 
 export const AdminPanel: FC = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [editingLesson, setEditingLesson] = useState<Lesson | undefined>();
+  const navigate = useNavigate();
+  const [showDangerZone, setShowDangerZone] = useState(false);
   const { lessons, loading, refetch } = useLessons();
 
   const handleInitDb = async () => {
@@ -20,19 +20,11 @@ export const AdminPanel: FC = () => {
   };
 
   const handleEdit = (lesson: Lesson) => {
-    setEditingLesson(lesson);
-    setShowForm(true);
+    navigate(`/admin/lesson/${lesson.id}`);
   };
 
-  const handleFormSuccess = async () => {
-    setShowForm(false);
-    setEditingLesson(undefined);
-    await refetch();
-  };
-
-  const handleToggleForm = () => {
-    setEditingLesson(undefined);
-    setShowForm(!showForm);
+  const handleAddLesson = () => {
+    navigate('/admin/lesson/new');
   };
 
   if (loading) {
@@ -48,43 +40,15 @@ export const AdminPanel: FC = () => {
       <h1 className="text-3xl font-bold mb-8">Панель администратора</h1>
       <div className="space-y-8">
         <div className="p-4 bg-white rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4">Инициализация базы данных</h2>
-          <p className="text-gray-600 mb-4">
-            Нажмите кнопку ниже, чтобы инициализировать базу данных начальными данными.
-            Это действие перезапишет все существующие данные.
-          </p>
-          <Button onClick={handleInitDb} variant="primary" className="bg-red-600 hover:bg-red-700">
-            Инициализировать базу данных
-          </Button>
-        </div>
-
-        <div className="p-4 bg-white rounded-lg shadow">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Управление уроками</h2>
-            <div className="flex gap-2">
-              <Button 
-                onClick={handleInitDb}
-                variant="outline"
-              >
-                Инициализировать БД
-              </Button>
-              <Button 
-                onClick={handleToggleForm}
-                variant="primary"
-              >
-                {showForm ? 'Скрыть форму' : 'Добавить урок'}
-              </Button>
-            </div>
+            <Button 
+              onClick={handleAddLesson}
+              variant="primary"
+            >
+              Добавить урок
+            </Button>
           </div>
-
-          {showForm && (
-            <div className="mb-8">
-              <LessonForm 
-                lesson={editingLesson} 
-                onSuccess={handleFormSuccess} 
-              />
-            </div>
-          )}
 
           <div>
             <h3 className="text-lg font-medium mb-4">Список уроков</h3>
@@ -112,6 +76,43 @@ export const AdminPanel: FC = () => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Блок опасных операций */}
+        <div className="p-4 bg-white rounded-lg shadow border border-red-200">
+          <button
+            onClick={() => setShowDangerZone(!showDangerZone)}
+            className="w-full flex justify-between items-center text-left"
+          >
+            <h2 className="text-xl font-semibold text-red-600">Опасные операции</h2>
+            <svg
+              className={`w-5 h-5 transform transition-transform ${showDangerZone ? 'rotate-180' : ''}`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+
+          {showDangerZone && (
+            <div className="mt-4 pt-4 border-t border-red-200">
+              <div className="p-4 bg-red-50 rounded-lg">
+                <h3 className="text-lg font-medium text-red-700 mb-4">Инициализация базы данных</h3>
+                <p className="text-red-600 mb-4">
+                  Нажмите кнопку ниже, чтобы инициализировать базу данных начальными данными.
+                  Это действие перезапишет все существующие данные.
+                </p>
+                <Button 
+                  onClick={handleInitDb} 
+                  variant="primary" 
+                  className="bg-red-600 hover:bg-red-700"
+                >
+                  Инициализировать базу данных
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
